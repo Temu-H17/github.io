@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Note RSSフィード</title>
+    <title>Note - 川端準</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,6 +18,14 @@
             text-align: center;
             padding: 1rem;
         }
+        nav a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
         main {
             padding: 2rem;
             max-width: 800px;
@@ -25,6 +33,12 @@
             background: white;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        section {
+            margin-bottom: 2rem;
+        }
+        h2 {
+            color: #333;
         }
         article {
             margin-bottom: 2rem;
@@ -59,15 +73,24 @@
 </head>
 <body>
     <header>
-        <h1>Note RSSフィード</h1>
+        <h1>Note</h1>
+        <nav>
+            <a href="index.html">ホーム</a> |
+            <a href="about.html">プロフィール</a> |
+            <a href="project.html">8つの柱</a> |
+            <a href="contact.html">お問い合わせ</a>
+        </nav>
     </header>
     <main>
-        <div id="articles">
-            <p>記事を読み込んでいます...</p>
-        </div>
+        <section>
+            <h2>最新のNote記事</h2>
+            <div id="articles">
+                <p>記事を読み込んでいます...</p>
+            </div>
+        </section>
     </main>
     <footer>
-        <p>&copy; 2024 川端 準</p>
+        <p>&copy; 2024 川端準</p>
     </footer>
     <script>
         const RSS_URL = 'https://note.com/jun_kawabata/rss/';
