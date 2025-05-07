@@ -5,7 +5,7 @@
      crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Note - 川端準</title>
+    <title>川端準のNote</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -47,12 +47,6 @@
             border-bottom: 1px solid #ddd;
             padding-bottom: 1rem;
         }
-        article img {
-            width: 100%;
-            max-height: 300px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
         article h2 {
             margin: 0.5rem 0;
             font-size: 1.5rem;
@@ -75,61 +69,66 @@
 </head>
 <body>
     <header>
-        <h1>Note</h1>
+        <h1>川端準のNote</h1>
         <nav>
-            <a href="index.html">ホーム</a> |
             <a href="about.html">プロフィール</a> |
             <a href="project.html">7つの柱</a> |
+            <a href="note.html">note</a> |
             <a href="contact.html">お問い合わせ</a>
         </nav>
     </header>
     <main>
         <section>
-            <h2>最新のNote記事</h2>
+            <h2>最新の記事一覧</h2>
             <div id="articles">
                 <p>記事を読み込んでいます...</p>
             </div>
         </section>
     </main>
     <footer>
-        <p>&copy; 2024 川端準</p>
+        <p>&copy; 2025 川端準</p>
     </footer>
-<script>
-    const RSS_URL = 'https://note.com/jun_kawabata/rss/';
-    const PROXY_URL = 'https://api.allorigins.win/get?url=' + encodeURIComponent(RSS_URL);
+    <script>
+        const RSS_URL = 'https://note.com/jun_kawabata/rss/';
+        const PROXY_URL = 'https://api.allorigins.win/get?url=' + encodeURIComponent(RSS_URL);
 
-    async function loadRSS() {
-        const articlesContainer = document.getElementById("articles");
-        try {
-            const response = await fetch(PROXY_URL);
-            if (!response.ok) throw new Error(`HTTPエラー: ${response.status}`);
-            const data = await response.json();
+        async function loadRSS() {
+            const articlesContainer = document.getElementById("articles");
+            try {
+                const response = await fetch(PROXY_URL);
+                if (!response.ok) throw new Error(`HTTPエラー: ${response.status}`);
+                const data = await response.json();
 
-            const parser = new DOMParser();
-            const rss = parser.parseFromString(data.contents, "text/xml");
-            const items = rss.querySelectorAll("item");
+                const parser = new DOMParser();
+                const rss = parser.parseFromString(data.contents, "text/xml");
+                const items = rss.querySelectorAll("item");
 
-            articlesContainer.innerHTML = "";
-            items.forEach(item => {
-                const title = item.querySelector("title").textContent;
-                const link = item.querySelector("link").textContent;
-                const pubDate = new Date(item.querySelector("pubDate").textContent);
+                articlesContainer.innerHTML = "";
+                items.forEach(item => {
+                    const title = item.querySelector("title").textContent;
+                    const link = item.querySelector("link").textContent;
+                    const pubDate = new Date(item.querySelector("pubDate").textContent);
+                    const description = item.querySelector("description")?.textContent || "";
 
-                const articleHTML = `
-                    <article>
-                        <h2><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h2>
-                        <p>公開日: ${pubDate.toLocaleDateString("ja-JP")}</p>
-                    </article>
-                `;
-                articlesContainer.innerHTML += articleHTML;
-            });
-        } catch (error) {
-            console.error("RSSの読み込みに失敗しました:", error);
-            articlesContainer.innerHTML = "<p class='error-message'>記事の読み込みに失敗しました。</p>";
+                    const cleanText = description.replace(/<[^>]*>/g, ""); // HTMLタグ除去
+                    const preview = cleanText.length > 120 ? cleanText.slice(0, 120) + "…" : cleanText;
+
+                    const articleHTML = `
+                        <article>
+                            <h2><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h2>
+                            <p>公開日: ${pubDate.toLocaleDateString("ja-JP")}</p>
+                            <p>${preview}</p>
+                        </article>
+                    `;
+                    articlesContainer.innerHTML += articleHTML;
+                });
+            } catch (error) {
+                console.error("RSSの読み込みに失敗しました:", error);
+                articlesContainer.innerHTML = "<p class='error-message'>記事の読み込みに失敗しました。</p>";
+            }
         }
-    }
 
-    document.addEventListener("DOMContentLoaded", loadRSS);
-</script>
+        document.addEventListener("DOMContentLoaded", loadRSS);
+    </script>
 </body>
 </html>
